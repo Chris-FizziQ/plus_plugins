@@ -33,11 +33,16 @@ Stream<MagnetometerEvent> get magnetometerEvents {
   return _sensors.magnetometerEvents;
 }
 
+@Deprecated('Use rawmagnetometerEventStream() instead.')
+Stream<RawMagnetometerEvent> get rawmagnetometerEvents {
+  return _sensors.rawmagnetometerEvents;
+}
+
 /// Returns a broadcast stream of events from the device accelerometer at the
 /// given sampling frequency.
 @override
 Stream<AccelerometerEvent> accelerometerEventStream({
-  Duration samplingPeriod = SensorInterval.normalInterval,
+  Duration samplingPeriod = SensorInterval.fastestInterval,
 }) {
   return _sensors.accelerometerEventStream(samplingPeriod: samplingPeriod);
 }
@@ -46,7 +51,7 @@ Stream<AccelerometerEvent> accelerometerEventStream({
 /// given sampling frequency.
 @override
 Stream<GyroscopeEvent> gyroscopeEventStream({
-  Duration samplingPeriod = SensorInterval.normalInterval,
+  Duration samplingPeriod = SensorInterval.fastestInterval,
 }) {
   return _sensors.gyroscopeEventStream(samplingPeriod: samplingPeriod);
 }
@@ -55,7 +60,7 @@ Stream<GyroscopeEvent> gyroscopeEventStream({
 /// gravity removed at the given sampling frequency.
 @override
 Stream<UserAccelerometerEvent> userAccelerometerEventStream({
-  Duration samplingPeriod = SensorInterval.normalInterval,
+  Duration samplingPeriod = SensorInterval.fastestInterval,
 }) {
   return _sensors.userAccelerometerEventStream(samplingPeriod: samplingPeriod);
 }
@@ -64,16 +69,25 @@ Stream<UserAccelerometerEvent> userAccelerometerEventStream({
 /// given sampling frequency.
 @override
 Stream<MagnetometerEvent> magnetometerEventStream({
-  Duration samplingPeriod = SensorInterval.normalInterval,
+  Duration samplingPeriod = SensorInterval.fastestInterval,
 }) {
   return _sensors.magnetometerEventStream(samplingPeriod: samplingPeriod);
+}
+
+/// Returns a broadcast stream of events from the device magnetometer at the
+/// given sampling frequency.
+@override
+Stream<RawMagnetometerEvent> rawmagnetometerEventStream({
+  Duration samplingPeriod = SensorInterval.fastestInterval,
+}) {
+  return _sensors.rawmagnetometerEventStream(samplingPeriod: samplingPeriod);
 }
 
 /// Returns a broadcast stream of events from the device barometer at the
 /// given sampling frequency.
 @override
 Stream<BarometerEvent> barometerEventStream({
-  Duration samplingPeriod = SensorInterval.normalInterval,
+  Duration samplingPeriod = SensorInterval.fastestInterval,
 }) {
   return _sensors.barometerEventStream(samplingPeriod: samplingPeriod);
 }
