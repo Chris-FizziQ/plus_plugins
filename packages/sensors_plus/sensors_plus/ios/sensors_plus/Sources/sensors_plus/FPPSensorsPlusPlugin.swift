@@ -51,6 +51,16 @@ public class FPPSensorsPlusPlugin: NSObject, FlutterPlugin {
         _eventChannels[magnetometerStreamHandlerName] = magnetometerChannel
         _streamHandlers[magnetometerStreamHandlerName] = magnetometerStreamHandler
 
+        let rawmagnetometerStreamHandler = FPPRawMagnetometerStreamHandlerPlus()
+        let rawmagnetometerStreamHandlerName = "dev.fluttercommunity.plus/sensors/rawmagnetometer"
+        let rawmagnetometerChannel = FlutterEventChannel(
+                name: rawmagnetometerStreamHandlerName,
+                binaryMessenger: registrar.messenger()
+        )
+        rawmagnetometerChannel.setStreamHandler(rawmagnetometerStreamHandler)
+        _eventChannels[rawmagnetometerStreamHandlerName] = rawmagnetometerChannel
+        _streamHandlers[rawmagnetometerStreamHandlerName] = rawmagnetometerStreamHandler
+
         let barometerStreamHandler = FPPBarometerStreamHandlerPlus()
         let barometerStreamHandlerName = "dev.fluttercommunity.plus/sensors/barometer"
         let barometerChannel = FlutterEventChannel(
@@ -76,6 +86,8 @@ public class FPPSensorsPlusPlugin: NSObject, FlutterPlugin {
                 streamHandler = _streamHandlers[gyroscopeStreamHandlerName]
             case "setMagnetometerSamplingPeriod":
                 streamHandler = _streamHandlers[magnetometerStreamHandlerName]
+            case "setRawMagnetometerSamplingPeriod":
+                streamHandler = _streamHandlers[rawmagnetometerStreamHandlerName]
             case "setBarometerSamplingPeriod":
                 streamHandler = _streamHandlers[barometerStreamHandlerName]
             default:
