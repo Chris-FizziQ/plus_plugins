@@ -17,12 +17,14 @@ class SensorsPlugin : FlutterPlugin {
     private lateinit var userAccelChannel: EventChannel
     private lateinit var gyroscopeChannel: EventChannel
     private lateinit var magnetometerChannel: EventChannel
+    private lateinit var rawmagnetometerChannel: EventChannel
     private lateinit var barometerChannel: EventChannel
 
     private lateinit var accelerometerStreamHandler: StreamHandlerImpl
     private lateinit var userAccelStreamHandler: StreamHandlerImpl
     private lateinit var gyroscopeStreamHandler: StreamHandlerImpl
     private lateinit var magnetometerStreamHandler: StreamHandlerImpl
+    private lateinit var rawmagnetometerStreamHandler: StreamHandlerImpl
     private lateinit var barometerStreamHandler: StreamHandlerImpl
 
     override fun onAttachedToEngine(binding: FlutterPluginBinding) {
@@ -43,6 +45,7 @@ class SensorsPlugin : FlutterPlugin {
                 "setUserAccelerometerSamplingPeriod" -> userAccelStreamHandler
                 "setGyroscopeSamplingPeriod" -> gyroscopeStreamHandler
                 "setMagnetometerSamplingPeriod" -> magnetometerStreamHandler
+                "setRawMagnetometerSamplingPeriod" -> rawmagnetometerStreamHandler
                 "setBarometerSamplingPeriod" -> barometerStreamHandler
                 else -> null
             }
@@ -90,6 +93,13 @@ class SensorsPlugin : FlutterPlugin {
         )
         magnetometerChannel.setStreamHandler(magnetometerStreamHandler)
 
+        rawmagnetometerChannel = EventChannel(messenger, RAW_MAGNETOMETER_CHANNEL_NAME)
+        rawmagnetometerStreamHandler = StreamHandlerImpl(
+            sensorsManager,
+            Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED
+        )
+        rawmagnetometerChannel.setStreamHandler(rawmagnetometerStreamHandler)
+
         barometerChannel = EventChannel(messenger, BAROMETER_CHANNEL_NAME)
         barometerStreamHandler = StreamHandlerImpl(
             sensorsManager,
@@ -123,6 +133,8 @@ class SensorsPlugin : FlutterPlugin {
             "dev.fluttercommunity.plus/sensors/user_accel"
         private const val MAGNETOMETER_CHANNEL_NAME =
             "dev.fluttercommunity.plus/sensors/magnetometer"
+        private const val RAW_MAGNETOMETER_CHANNEL_NAME =
+            "dev.fluttercommunity.plus/sensors/rawmagnetometer"
         private const val BAROMETER_CHANNEL_NAME =
             "dev.fluttercommunity.plus/sensors/barometer"
     }
