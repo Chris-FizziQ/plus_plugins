@@ -21,7 +21,7 @@ class Sensors extends SensorsPlatform {
   /// listener will also be affected.
   @override
   Stream<AccelerometerEvent> accelerometerEventStream({
-    Duration samplingPeriod = SensorInterval.normalInterval,
+    Duration samplingPeriod = SensorInterval.fastestInterval,
   }) {
     return _platform.accelerometerEventStream(samplingPeriod: samplingPeriod);
   }
@@ -34,7 +34,7 @@ class Sensors extends SensorsPlatform {
   /// listener will also be affected.
   @override
   Stream<GyroscopeEvent> gyroscopeEventStream({
-    Duration samplingPeriod = SensorInterval.normalInterval,
+    Duration samplingPeriod = SensorInterval.fastestInterval,
   }) {
     return _platform.gyroscopeEventStream(samplingPeriod: samplingPeriod);
   }
@@ -47,7 +47,7 @@ class Sensors extends SensorsPlatform {
   /// listener will also be affected.
   @override
   Stream<UserAccelerometerEvent> userAccelerometerEventStream({
-    Duration samplingPeriod = SensorInterval.normalInterval,
+    Duration samplingPeriod = SensorInterval.fastestInterval,
   }) {
     return _platform.userAccelerometerEventStream(
         samplingPeriod: samplingPeriod);
@@ -61,9 +61,22 @@ class Sensors extends SensorsPlatform {
   /// listener will also be affected.
   @override
   Stream<MagnetometerEvent> magnetometerEventStream({
-    Duration samplingPeriod = SensorInterval.normalInterval,
+    Duration samplingPeriod = SensorInterval.fastestInterval,
   }) {
     return _platform.magnetometerEventStream(samplingPeriod: samplingPeriod);
+  }
+
+  /// Returns a broadcast stream of events from the device magnetometer at the
+  /// given sampling frequency.
+  ///
+  /// This method always returning the same stream. If this method is called
+  /// again, the sampling period of the stream will be update. All previous
+  /// listener will also be affected.
+  @override
+  Stream<RawMagnetometerEvent> rawmagnetometerEventStream({
+    Duration samplingPeriod = SensorInterval.fastestInterval,
+  }) {
+    return _platform.rawmagnetometerEventStream(samplingPeriod: samplingPeriod);
   }
 
   /// Returns a broadcast stream of events from the device barometer at the
@@ -74,7 +87,7 @@ class Sensors extends SensorsPlatform {
   /// listener will also be affected.
   @override
   Stream<BarometerEvent> barometerEventStream({
-    Duration samplingPeriod = SensorInterval.normalInterval,
+    Duration samplingPeriod = SensorInterval.fastestInterval,
   }) {
     return _platform.barometerEventStream(samplingPeriod: samplingPeriod);
   }
