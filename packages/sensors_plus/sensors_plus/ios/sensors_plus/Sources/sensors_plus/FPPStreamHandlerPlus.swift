@@ -196,7 +196,114 @@ class FPPGyroscopeStreamHandlerPlus: NSObject, MotionStreamHandler {
     }
 }
 
+class FPPOLDMagnetometerStreamHandlerPlus: NSObject, MotionStreamHandler {
+
+    var samplingPeriod = 200000 {
+        didSet {
+            _initMotionManager()
+            _motionManager.magnetometerUpdateInterval = Double(samplingPeriod) * 0.000001
+        }
+    }
+
+    func onListen(
+            withArguments arguments: Any?,
+            eventSink sink: @escaping FlutterEventSink
+    ) -> FlutterError? {
+        _initMotionManager()
+        _motionManager.startMagnetometerUpdates(to: OperationQueue()) { data, error in
+            if _isCleanUp {
+                return
+            }
+            if (error != nil) {
+                sink(FlutterError(
+                        code: "UNAVAILABLE",
+                        message: error!.localizedDescription,
+                        details: nil
+                ))
+                return
+            }
+            let magneticField = data!.magneticField
+            sendFlutter(
+                x: magneticField.x,
+                y: magneticField.y,
+                z: magneticField.z,
+                timestamp: data!.timestamp,
+                sink: sink
+            )
+        }
+        return nil
+    }
+
+    func onCancel(withArguments arguments: Any?) -> FlutterError? {
+        _motionManager.stopDeviceMotionUpdates()
+        return nil
+    }
+
+    func dealloc() {
+        FPPSensorsPlusPlugin._cleanUp()
+    }
+}
+
 class FPPMagnetometerStreamHandlerPlus: NSObject, MotionStreamHandler {
+
+    var samplingPeriod = 200000 {
+        didSet {
+            _initMotionManager()
+            _motionManager.magnetometerUpdateInterval = Double(samplingPeriod) * 0.000001
+        }
+    }
+
+    func onListen(
+            withArguments arguments: Any?,
+            eventSink sink: @escaping FlutterEventSink
+    ) -> FlutterError? {
+        _initMotionManager()
+        _motionManager.showsDeviceMovementDisplay = true
+
+        _motionManager.startDeviceMotionUpdates(
+            using: CMAttitudeReferenceFrame.xArbitraryCorrectedZVertical,
+            to: OperationQueue()
+        ) { motionData, error in
+            if _isCleanUp {
+                return
+            }
+
+            if (error != nil) {
+                sink(FlutterError(
+                    code: "UNAVAILABLE",
+                    message: error!.localizedDescription,
+                    details: nil
+                ))
+                return
+            }
+
+            // Extraire le champ magnétique calibré
+            let field = motionData!.magneticField.field
+
+            // Envoyer les données à Flutter
+            sendFlutter(
+                x: field.x,
+                y: field.y,
+                z: field.z,
+                timestamp: motionData!.timestamp * 1000, // Conversion en millisecondes
+                sink: sink
+            )
+        }
+
+        return nil
+    }
+
+    func onCancel(withArguments arguments: Any?) -> FlutterError? {
+        _motionManager.stopDeviceMotionUpdates()
+        return nil
+    }
+
+    func dealloc() {
+        FPPSensorsPlusPlugin._cleanUp()
+    }
+}
+
+class FPPRawMagnetometerStreamHandlerPlus: NSObject, MotionStreamHandler {
 
     var samplingPeriod = 200000 {
         didSet {
