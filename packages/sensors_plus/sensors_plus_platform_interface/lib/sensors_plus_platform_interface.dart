@@ -14,10 +14,12 @@ import 'src/gyroscope_event.dart';
 import 'src/magnetometer_event.dart';
 import 'src/user_accelerometer_event.dart';
 import 'src/barometer_event.dart';
+import 'src/raw_magnetometer_event.dart';
 
 export 'src/accelerometer_event.dart';
 export 'src/gyroscope_event.dart';
 export 'src/magnetometer_event.dart';
+export 'src/raw_magnetometer_event.dart';
 export 'src/user_accelerometer_event.dart';
 export 'src/barometer_event.dart';
 export 'src/sensor_interval.dart';
@@ -71,6 +73,13 @@ abstract class SensorsPlatform extends PlatformInterface {
     return magnetometerEventStream();
   }
 
+  /// A broadcast stream of events from the device magnetometer.
+  @nonVirtual
+  @Deprecated('Use magnetometerEventStream() instead.')
+  Stream<RawMagnetometerEvent> get rawmagnetometerEvents {
+    return rawmagnetometerEventStream();
+  }
+
   /// Returns a broadcast stream of events from the device accelerometer at the
   /// given sampling frequency.
   Stream<AccelerometerEvent> accelerometerEventStream({
@@ -103,6 +112,14 @@ abstract class SensorsPlatform extends PlatformInterface {
     Duration samplingPeriod = SensorInterval.normalInterval,
   }) {
     throw UnimplementedError('magnetometerEvents has not been implemented.');
+  }
+
+  /// Returns a broadcast stream of events from the device magnetometer at the
+  /// given sampling frequency.
+  Stream<RawMagnetometerEvent> rawmagnetometerEventStream({
+    Duration samplingPeriod = SensorInterval.normalInterval,
+  }) {
+    throw UnimplementedError('rawmagnetometerEvents has not been implemented.');
   }
 
   /// Returns a broadcast stream of events from the device barometer at the
