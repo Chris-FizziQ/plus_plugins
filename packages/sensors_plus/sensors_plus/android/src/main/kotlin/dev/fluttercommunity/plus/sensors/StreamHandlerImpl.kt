@@ -18,7 +18,7 @@ internal class StreamHandlerImpl(
 
     private var timestampMicroAtBoot: Long = System.currentTimeMillis() * 1000 - SystemClock.elapsedRealtimeNanos() / 1000
 
-    var samplingPeriod = 200000
+    var samplingPeriod = SensorManager.SENSOR_DELAY_GAME
         set(value) {
             field = value
             updateRegistration()
@@ -58,6 +58,7 @@ internal class StreamHandlerImpl(
             Sensor.TYPE_LINEAR_ACCELERATION -> "User Accelerometer"
             Sensor.TYPE_GYROSCOPE -> "Gyroscope"
             Sensor.TYPE_MAGNETIC_FIELD -> "Magnetometer"
+            Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED -> "RawMagnetometer"
             Sensor.TYPE_PRESSURE -> "Barometer"
             else -> "Undefined"
         }
